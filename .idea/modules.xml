@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../workplace/14_day_training_camp/.idea/14_day_training_camp.iml" filepath="$PROJECT_DIR$/../../workplace/14_day_training_camp/.idea/14_day_training_camp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Ai_Greedyai/.idea/Ai_Greedyai.iml" filepath="$PROJECT_DIR$/../Ai_Greedyai/.idea/Ai_Greedyai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Auto_Test_Platform/.idea/Auto_Test_Platform.iml" filepath="$PROJECT_DIR$/../Auto_Test_Platform/.idea/Auto_Test_Platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/api_automation_test.iml" filepath="$PROJECT_DIR$/.idea/api_automation_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../chatbot-web/.idea/chatbot-web.iml" filepath="$PROJECT_DIR$/../chatbot-web/.idea/chatbot-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../第9模块课件/vue_lesson 2/代码/.idea/代码.iml" filepath="$PROJECT_DIR$/../第9模块课件/vue_lesson 2/代码/.idea/代码.iml" />
+    </modules>
+  </component>
+</project>
