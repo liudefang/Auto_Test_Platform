@@ -1,7 +1,6 @@
 # 接口测试平台从开始到放弃
 # python3.6.3 Django 2.0.2框架
-体验地址：http://120.79.232.23  请体验用户不要删除已有数据<br>
-账号：admin 密码：admin369874125
+
 # 版本更新：
 ## V2.1.2<br>
 1.增加导出测试用例功能<br>
@@ -65,12 +64,11 @@ npm run build
 python manage.py runserver 0.0.0.0:8000
 ```
 ### 12.现在就可以访问 http://127.0.0.1:8000/login 进行登录， http://127.0.0.1:8000/admin 为后台管理平台<br>
-## 微信打赏：<br>
-![微信打赏](https://github.com/githublitao/api_automation_test/blob/master/img/%E6%94%B6%E6%AC%BE%E7%A0%81.png)<br>
+
 <br>
 ## 系统图解：<br>
 ![系统图](https://github.com/githublitao/api_automation_test/blob/master/img/%E7%B3%BB%E7%BB%9F%E5%9B%BE%E8%A7%A3.png)<br>
-<br>
+
 项目讲解：
 ----
 1、登录页面，只提供了登录方法，并没有注册和忘记密码功能，账号由后台管理系统直接创建分配<br>
