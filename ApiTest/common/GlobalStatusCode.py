@@ -60,3 +60,11 @@ def page_not_int():
 
 def mock_error():
     return '1015', '未匹配到mock地址或未开启!'
+
+
+def parameter_not_null():
+    return '1016', '必填参数不能为空!'
+
+
+def parameter_type_error():
+    return '1017', '类型错误!'

@@ -205,7 +205,7 @@
                 getProject(headers, params).then((res) => {
                     self.listLoading = false;
                     let { msg, code, data } = res;
-                    if (code === '999999') {
+                    if (code === '0') {
                         self.total = data.total;
                         self.project = data.data
                     }
@@ -232,7 +232,7 @@
                     };
                     delProject(header, params).then(_data => {
                         let { msg, code, data } = _data;
-                        if (code === '999999') {
+                        if (code === '0') {
                             self.$message({
                                 message: '删除成功',
                                 center: true,
@@ -261,7 +261,7 @@
                     disableProject(headers, params).then(_data => {
                         let { msg, code, data } = _data;
                         self.listLoading = false;
-                        if (code === '999999') {
+                        if (code === '0') {
                             self.$message({
                                 message: '禁用成功',
                                 center: true,
@@ -280,7 +280,7 @@
                     enableProject(headers, params).then(_data => {
                         let { msg, code, data } = _data;
                         self.listLoading = false;
-                        if (code === '999999') {
+                        if (code === '0') {
                             self.$message({
                                 message: '启用成功',
                                 center: true,
@@ -332,7 +332,7 @@
                             updateProject(header, params).then(_data => {
                                 let {msg, code, data} = _data;
                                 self.editLoading = false;
-                                if (code === '999999') {
+                                if (code === '0') {
                                     self.$message({
                                         message: '修改成功',
                                         center: true,
@@ -341,7 +341,7 @@
                                     self.$refs['editForm'].resetFields();
                                     self.editFormVisible = false;
                                     self.getProjectList()
-                                } else if (code === '999997'){
+                                } else if (code === '1002'){
                                     self.$message.error({
                                         message: msg,
                                         center: true,
@@ -362,9 +362,7 @@
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         let self = this;
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            self.addLoading = true;
-                            //NProgress.start();
+
                             let params = JSON.stringify({
                                 name: self.addForm.name,
                                 type: self.addForm.type,
@@ -378,16 +376,16 @@
                             addProject(header, params).then(_data => {
                                 let {msg, code, data} = _data;
                                 self.addLoading = false;
-                                if (code === '999999') {
+                                if (code === '0') {
                                     self.$message({
-                                        message: '添加成功',
+                                        message: msg,
                                         center: true,
                                         type: 'success'
                                     });
                                     self.$refs['addForm'].resetFields();
                                     self.addFormVisible = false;
                                     self.getProjectList()
-                                } else if (code === '999997') {
+                                } else if (code === '1002') {
                                     self.$message.error({
                                         message: msg,
                                         center: true,
@@ -402,7 +400,7 @@
                                     self.getProjectList()
                                 }
                             })
-                        });
+
                     }
                 });
             },
@@ -426,7 +424,7 @@
                     };
                     delProject(header, params).then(_data => {
                         let {msg, code, data} = _data;
-                        if (code === '999999') {
+                        if (code === '0') {
                             self.$message({
                                 message: '删除成功',
                                 center: true,

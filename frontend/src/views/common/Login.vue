@@ -6,9 +6,9 @@
             <li><div style="margin-left:40px;">试</div></li>
             <li><div style="margin-left:60px;">变</div></li>
             <li><div style="margin-left:80px;">得</div></li>
-            <li><div style="margin-left:80px;">更</div></li>
-            <li><div style="margin-left:100px;">高</div></li>
-            <li><div style="margin-left:120px;">效</div></li>
+            <li><div style="margin-left:100px;">更</div></li>
+            <li><div style="margin-left:120px;">高</div></li>
+            <li><div style="margin-left:140px;">效</div></li>
         </ul>
         <div style="width:32%;height: auto;margin-left: 30%">
             <div class="title0">自动化测试平台</div>
