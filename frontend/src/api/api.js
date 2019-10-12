@@ -12,3 +12,15 @@ export const getProject = (headers, params) => {
 // 添加项目
 export const addProject = (headers, params) => {
   return axios.post(`${test_url}/api/project/add_project`, params, {headers}).then(res => res.data);};
+// 编辑项目
+export const updateProject = (headers, params) => {
+  return axios.post(`${test_url}/api/project/update_project`, params, {headers}).then(res => res.data);};
+// 删除项目
+export const delProject = (headers, params) => {
+  return axios.post(`${test_url}/api/project/del_project`, params, {headers}).then(res => res.data);};
+// 禁用项目
+export const disableProject = (headers, params) => {
+    return axios.post(`${test_url}/api/project/disable_project`, params, {headers}).then(res => res.data); };
+// 启用项目
+export const enableProject = (headers, params) => {
+    return axios.post(`${test_url}/api/project/enable_project`, params, {headers}).then(res => res.data); };

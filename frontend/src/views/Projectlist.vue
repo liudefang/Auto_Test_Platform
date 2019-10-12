@@ -234,7 +234,7 @@
                         let { msg, code, data } = _data;
                         if (code === '0') {
                             self.$message({
-                                message: '删除成功',
+                                message: msg,
                                 center: true,
                                 type: 'success'
                             })
@@ -263,7 +263,7 @@
                         self.listLoading = false;
                         if (code === '0') {
                             self.$message({
-                                message: '禁用成功',
+                                message: msg,
                                 center: true,
                                 type: 'success'
                             });
@@ -282,7 +282,7 @@
                         self.listLoading = false;
                         if (code === '0') {
                             self.$message({
-                                message: '启用成功',
+                                message: msg,
                                 center: true,
                                 type: 'success'
                             });
@@ -315,9 +315,6 @@
                 let self = this;
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            self.editLoading = true;
-                            //NProgress.start();
                             let params = {
                                 project_id: self.editForm.id,
                                 name: self.editForm.name,
@@ -334,7 +331,7 @@
                                 self.editLoading = false;
                                 if (code === '0') {
                                     self.$message({
-                                        message: '修改成功',
+                                        message: msg,
                                         center: true,
                                         type: 'success'
                                     });
@@ -353,7 +350,7 @@
                                     })
                                 }
                             });
-                        });
+
                     }
                 });
             },
@@ -426,7 +423,7 @@
                         let {msg, code, data} = _data;
                         if (code === '0') {
                             self.$message({
-                                message: '删除成功',
+                                message: msg,
                                 center: true,
                                 type: 'success'
                             })

@@ -4,6 +4,7 @@ import django
 import sys
 import os
 
+from ApiTest.serializers import ProjectDynamicDeserializer
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
@@ -79,3 +80,26 @@ def check_json(src_data, dst_data):
 
     except Exception as e:
         return 'fail'
+
+
+def record_dynamic(project, _type, operationObject, user, data):
+    """
+    记录动态
+    :param project:
+    :param _type:
+    :param operationObject:
+    :param user:
+    :param data:
+    :return:
+    """
+    time = datetime.datetime.now()
+    dynamic_serializer = ProjectDynamicDeserializer(
+        data={
+            'time': time,
+            'project': project, 'type': _type,
+            'operationObject': operationObject, 'user': user,
+            'description': data
+        }
+    )
+    if dynamic_serializer.is_valid():
+        dynamic_serializer.save()
