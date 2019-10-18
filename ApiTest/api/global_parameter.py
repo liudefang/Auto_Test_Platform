@@ -1,3 +1,8 @@
+# -*- encoding: utf-8 -*-
+# @Time    : 2019-10-15 11:13
+# @Author  : mike.liu
+# @File    : global_parameter.py
+
 import logging
 
 from crontab import CronTab
@@ -11,19 +16,19 @@ from rest_framework.views import APIView
 
 from ApiTest.common.api_response import JsonResponse
 from ApiTest.common.common import record_dynamic
-from ApiTest.models import Project
-from ApiTest.serializers import ProjectSerializer, ProjectMemberDeserializer, ProjectDeserializer
+from ApiTest.models import Project, GlobalHost
+from ApiTest.serializers import ProjectSerializer, ProjectMemberDeserializer, ProjectDeserializer, GlobalHostSerializer
 
 logger = logging.getLogger(__name__)  # 这里使用 __name__ 动态搜索定义的 logger 配置，这里有一个层次关系的知识点。
 
 
-class ProjectList(APIView):
+class HostTotal(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = ()
 
     def get(self, request):
         """
-        获取项目列表
+        获取host列表
         :param request:
         :return:
         """
@@ -32,11 +37,21 @@ class ProjectList(APIView):
             page = int(request.GET.get("page", 1))
         except (TypeError, ValueError):
             return JsonResponse(code="1014", msg="页数必须为整数!")
-        name = request.GET.get("name")
+        project_id = request.GET.get("project_id")
+        if not project_id.isdecimal():
+            return JsonResponse(code='1003', msg='参数有误!')
+        try:
+            pro_data = Project.objects.get(id=project_id)
+        except ObjectDoesNotExist:
+            return JsonResponse(code='1004', msg='项目不存在!')
+        pro_data = ProjectSerializer(pro_data)
+        if not pro_data.data['status']:
+            return JsonResponse(code='1020', msg='该项目已禁用!')
+        name = request.GET.get('name')
         if name:
-            obj = Project.objects.filter(name__contains=name).order_by("id")
+            obj = GlobalHost.objects.filter(name__contains=name, project=project_id).order_by('id')
         else:
-            obj = Project.objects.all().order_by("id")
+            obj = GlobalHost.objects.filter(project=project_id).order_by('id')
         paginator = Paginator(obj, page_size)   # paginator对象
         total = paginator.num_pages     # 总页数
         try:
@@ -45,14 +60,14 @@ class ProjectList(APIView):
             obm = paginator.page(1)
         except EmptyPage:
             obm = paginator.page(paginator.num_pages)
-        serialize = ProjectSerializer(obm, many=True)
+        serialize = GlobalHostSerializer(obm, many=True)
         return JsonResponse(data={"data": serialize.data,
                                   "page": page,
                                   "total": total
                                   }, code="0", msg="查询成功")
 
 
-class AddProject(APIView):
+class AddHost(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = ()
 
@@ -63,34 +78,18 @@ class AddProject(APIView):
         :return:
         """
         try:
-            # 必填参数name, version, type
-            if not data["name"] or not data["version"] or not data["type"]:
+            # 校验project_id类型为int
+            if not isinstance(data['project_id'], int):
+                return JsonResponse(code='1018', msg='项目id为整数!')
+            # name, host为必填
+            if not data["name"] or not data['host']:
                 return JsonResponse(code="1016", msg="必填参数不能为空!")
-            # type 类型web，APP
-            if data["type"] not in ['Web', 'App']:
-                return JsonResponse(code="1017", msg='类型错误!')
         except KeyError:
             return JsonResponse(code="1003", msg='参数有误！')
 
-    def add_project_member(self, project, user):
-        """
-        添加项目创建人员
-        :param project:
-        :param user:
-        :return:
-        """
-        member_serializer = ProjectMemberDeserializer(data={
-            "permissionType": '超级管理员', 'project': project,
-            'user': user
-        })
-        project = Project.objects.get(id=project)
-        user = User.objects.get(id=user)
-        if member_serializer.is_valid():
-            member_serializer.save(project=project, user=user)
-
     def post(self, request):
         """
-        新增项目
+        新增host
         :param request:
         :return:
         """
@@ -98,26 +97,31 @@ class AddProject(APIView):
         result = self.parameter_check(data)
         if result:
             return result
-        data['user'] = request.user.pk
-        project_serializer = ProjectDeserializer(data=data)
         try:
-            Project.objects.get(name=data['name'])
-            return JsonResponse(code='1002', msg='存在相同的项目名称!')
+            obj = Project.objects.get(id=data['project_id'])
+            if not request.user.is_superuser and obj.user.is_superuser:
+                return JsonResponse(code='1019', msg='无该项目操作权限!')
         except ObjectDoesNotExist:
+            return JsonResponse(code='1004', msg='项目不存在!')
+        pro_data = ProjectSerializer(obj)
+        if not pro_data.data['status']:
+            return JsonResponse(code='1020', msg='该项目已禁用!')
+        obi = GlobalHost.objects.filter(name=data['name'], project=data['project_id'])
+        if obi:
+            return JsonResponse(code='1006', msg='host已存在!')
+        else:
+            serializer = GlobalHostSerializer(data=data)
             with transaction.atomic():
-                if project_serializer.is_valid():
-                    # 保存项目
-                    project_serializer.save()
+                if serializer.is_valid():
+                    # 外键project_id
+                    serializer.save(project=obj)
                     # 记录动态
-                    record_dynamic(project=project_serializer.data.get("id"),
-                                   _type='添加', operationObject='项目', user=request.user.pk, data=data['name'])
-                    # 创建项目的用户添加为该项目的成员
-                    self.add_project_member(project_serializer.data.get('id'), request.user.pk)
+                    record_dynamic(project=data['project_id'],
+                                   _type='添加', operationObject='域名', user=request.user.pk, data=data['name'])
                     return JsonResponse(data={
-                        'project_id': project_serializer.data.get('id')
-                    }, code='0', msg='新增项目成功!')
-                else:
-                    return JsonResponse(code='1001', msg='新增项目失败!')
+                        'host_id': serializer.data.get('id')
+                    }, code='0', msg='创建成功!')
+                return JsonResponse(code='1001', msg='创建失败!')
 
 
 class UpdateProject(APIView):

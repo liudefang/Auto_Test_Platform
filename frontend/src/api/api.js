@@ -24,3 +24,12 @@ export const disableProject = (headers, params) => {
 // 启用项目
 export const enableProject = (headers, params) => {
     return axios.post(`${test_url}/api/project/enable_project`, params, {headers}).then(res => res.data); };
+// 获取项目详情
+export const getProjectDetail = (headers, params) => {
+  return axios.get(`${test_url}/api/title/project_info`, { params: params, headers: headers}).then(res =>res.data);};
+// 获取测试地址列表
+export const getHost = (headers, params) => {
+  return axios.get(`${test_url}/api/global/host_total`, { params: params, headers: headers}).then(res => res.data);};
+// 添加测试地址列表
+export const addHost = (headers, params) => {
+    return axios.post(`${test_url}/api/global/add_host`, params, {headers}).then(res => res.data); };

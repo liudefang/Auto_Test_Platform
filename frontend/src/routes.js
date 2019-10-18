@@ -3,7 +3,9 @@ const Login = () => import('./views/common/Login.vue');
 const Home = () => import('./views/Home.vue');
 const About = () => import('./views/About.vue');
 const projectList = () => import('./views/Projectlist.vue');
-
+const ProjectInfo = () => import('./views/Project.vue');
+const ProjectTitle = () => import('./views/project/projectTitle/ProjectTitle.vue');
+const globalHost = () => import('./views/project/global/Globalhost.vue');
 
 let routes = [
     {
@@ -31,6 +33,27 @@ let routes = [
             { path: '/about', component: About, iconCls:'fa fa-address-card', name: '关于我们'},
             ]
     },
+    {
+      path: '*',
+      hidden: true,
+      projectHidden: true,
+      redirect: { path: '/404'}
+    },
+    {
+      path: '/project/project=:project_id',
+      component: ProjectInfo,
+      name: '项目',
+      hidden: true,
+      children: [
+        {
+          path: '/ProjectTitle/project=:project_id', component: ProjectTitle, name: '项目概况', leaf: true
+        },
+        {
+          path: '/GlobalHost/project=:project_id', component: globalHost, name: 'Host配置', leaf: true
+        },
+
+      ]
+    }
 
 ];
 
